@@ -37,13 +37,23 @@ class InstallPowerDns
 
     public function handle()
     {
+        // apt update
+        $this->server->cmd('apt-get update');
+
+        // install mysql
+        $mysqlAdminPass = 'admin_shh';
+        $script = $this->stub('install_mysql', ['mysql_admin_pass' => $mysqlAdminPass]);
+        $this->server->cmd($script);
+
+        // instal power dns
         $script = $this->stub('install_power_dns',
             [
-                'mysql_admin_pass' => 'admin_shh',
+                'mysql_admin_pass' => $mysqlAdminPass,
                 'mysql_app_pass'   => 'app_shh',
             ]
         );
         $this->server->cmd($script);
+
         if (!$this->server->success()) {
             throw new \Exception($this->server->output());
         }

@@ -1,15 +1,8 @@
-apt-get update
-echo "mysql-server-5.5 mysql-server/root_password password {{ mysql_admin_pass }}" | debconf-set-selections
-echo "mysql-server-5.5 mysql-server/root_password_again password {{ mysql_admin_pass }}" | debconf-set-selections
-apt-get install -y mysql-server mysql-client
-
 echo "pdns-backend-mysql pdns-backend-mysql/mysql/admin-pass password {{ mysql_admin_pass }}"  | debconf-set-selections
 echo "pdns-backend-mysql pdns-backend-mysql/mysql/app-pass password {{ mysql_app_pass }}"  | debconf-set-selections
 echo "pdns-backend-mysql pdns-backend-mysql/dbconfig-install boolean true" | debconf-set-selections
 apt-get install -y pdns-server pdns-backend-mysql
 
 
-sed -i 's/bind-address/#bind-address/g' /etc/mysql/my.cnf
 mysql -u root -p{{ mysql_admin_pass }} -e "update mysql.user set host = '%' where user = 'pdns'"
 mysql -u root -p{{ mysql_admin_pass }} -e "update mysql.db set host = '%' where user = 'pdns'"
-service mysql restart
