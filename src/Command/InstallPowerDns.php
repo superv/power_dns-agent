@@ -44,6 +44,7 @@ class InstallPowerDns
         $mysqlAdminPass = 'admin_shh';
         $script = $this->stub('install_mysql', ['mysql_admin_pass' => $mysqlAdminPass]);
         $this->server->cmd($script);
+        $this->server->restart('mysql');
 
         // instal power dns
         $script = $this->stub('install_power_dns',

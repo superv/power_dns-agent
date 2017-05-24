@@ -2,5 +2,4 @@ echo "mysql-server-5.5 mysql-server/root_password password {{ mysql_admin_pass }
 echo "mysql-server-5.5 mysql-server/root_password_again password {{ mysql_admin_pass }}" | debconf-set-selections
 apt-get install -y mysql-server mysql-client
 
-sed -i 's/bind-address/#bind-address/g' /etc/mysql/my.cnf
-service mysql restart
+sed -i 's/^bind-address/#bind-address/g' /etc/mysql/my.cnf
