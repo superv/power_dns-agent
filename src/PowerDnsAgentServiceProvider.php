@@ -7,11 +7,11 @@ use SuperV\Platform\Domains\Droplet\DropletServiceProvider;
 class PowerDnsAgentServiceProvider extends DropletServiceProvider
 {
     protected $listeners = [
-        'dns_zone.created'   => DnsZoneListener::class . '@created',
-        'dns_zone.updated'   => DnsZoneListener::class . '@updated',
-        'dns_zone.deleted'   => DnsZoneListener::class . '@deleted',
-        'dns_record.created' => DnsRecordListener::class . '@created',
-        'dns_record.updated' => DnsRecordListener::class . '@updated',
-        'dns_record.deleted' => DnsRecordListener::class . '@deleted',
+        'zone.created'   => DnsZoneListener::class . '@created',
+        'zone.updated'   => DnsZoneListener::class . '@updated',
+        'zone.deleted'   => DnsZoneListener::class . '@deleted',
+        'record.created' => DnsRecordListener::class . '@created',
+        'record.updated' => DnsRecordListener::class . '@updated',
+        'record.deleted' => DnsRecordListener::class . '@deleted',
     ];
 }

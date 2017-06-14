@@ -1,12 +1,12 @@
 <?php namespace SuperV\Agents\PowerDns\Command;
 
 use Illuminate\Config\Repository;
-use SuperV\Modules\Supreme\Domains\Server\Model\Eloquent\ServerModel;
+use SuperV\Modules\Supreme\Domains\Server\Model\ServerModel;
 
 class GetConnection
 {
     /**
-     * @var \SuperV\Modules\Supreme\Domains\Server\Model\Eloquent\ServerModel
+     * @var \SuperV\Modules\Supreme\Domains\Server\Model\ServerModel
      */
     private $server;
 
