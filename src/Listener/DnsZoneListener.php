@@ -22,11 +22,11 @@ class DnsZoneListener
         $zone->update(['external_id' => $id]);
     }
 
-    public function updated(DnsZoneModel $zone)
+    public function updated(ZoneModel $zone)
     {
     }
 
-    public function deleted(DnsZoneModel $zone)
+    public function deleted(ZoneModel $zone)
     {
         $connection = $this->dispatch(new GetConnection($zone->getServer()));
 
