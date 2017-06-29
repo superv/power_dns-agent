@@ -4,15 +4,17 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use SuperV\Agents\PowerDns\Command\GetConnection;
 use SuperV\Modules\Hosting\Domains\Services\Dns\DnsRecordModel;
 use SuperV\Modules\Hosting\Domains\Services\Dns\DnsZoneModel;
+use SuperV\Modules\Hosting\Domains\Services\Dns\RecordModel;
+use SuperV\Modules\Hosting\Domains\Services\Dns\ZoneModel;
 
 class DnsRecordListener
 {
     use DispatchesJobs;
 
-    public function created(DnsRecordModel $record)
+    public function created(RecordModel $record)
     {
-        /** @var DnsZoneModel $zone */
-        $zone = $record->getZone();
+        /** @var ZoneModel $zone */
+        $zone = $record->zone;
 
         $connection = $this->dispatch(new GetConnection($zone->getServer()));
         $domainId = $connection->table('domains')->select('id')->where('name', $zone->domain)->first()->id;
@@ -30,10 +32,10 @@ class DnsRecordListener
         $record->update(['external_id' => $id]);
     }
 
-    public function updated(DnsRecordModel $record)
+    public function updated(RecordModel $record)
     {
-        /** @var DnsZoneModel $zone */
-        $zone = $record->getZone();
+        /** @var ZoneModel $zone */
+        $zone = $record->zone;
 
         $connection = $this->dispatch(new GetConnection($zone->getServer()));
         $connection->table('records')
@@ -50,10 +52,10 @@ class DnsRecordListener
                    );
     }
 
-    public function deleted(DnsRecordModel $record)
+    public function deleted(RecordModel $record)
     {
-        /** @var DnsZoneModel $zone */
-        $zone = $record->getZone();
+        /** @var ZoneModel $zone */
+        $zone = $record->zone;
 
         $connection = $this->dispatch(new GetConnection($zone->getServer()));
         $connection->table('records')
