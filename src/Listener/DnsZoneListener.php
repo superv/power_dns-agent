@@ -3,11 +3,10 @@
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use SuperV\Agents\PowerDns\Command\GetConnection;
 use SuperV\Modules\Hosting\Domains\Services\Dns\ZoneModel;
+use SuperV\Platform\Domains\Event\Listener;
 
-class DnsZoneListener
+class DnsZoneListener extends Listener
 {
-    use DispatchesJobs;
-
     public function created(ZoneModel $zone)
     {
         $connection = $this->dispatch(new GetConnection($zone->getServer()));
