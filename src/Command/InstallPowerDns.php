@@ -1,14 +1,14 @@
 <?php namespace SuperV\Agents\PowerDns\Command;
 
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use SuperV\Modules\Supreme\Domains\Script\Command\ParseFile;
 use SuperV\Modules\Supreme\Domains\Server\Formula;
 use SuperV\Modules\Supreme\Domains\Server\Server;
 use SuperV\Platform\Domains\Droplet\Jobs\LocateResourceJob;
-use SuperV\Platform\Domains\Feature\JobDispatcherTrait;
 
 class InstallPowerDns
 {
-    use JobDispatcherTrait;
+    use DispatchesJobs;
 
     /**
      * @var array
@@ -64,8 +64,8 @@ class InstallPowerDns
 
     protected function stub($stub, $tokens)
     {
-        $location = $this->run(new LocateResourceJob("superv.agents.power_dns::{$stub}", 'stub'));
+        $location = $this->dispatch(new LocateResourceJob("superv.agents.power_dns::{$stub}", 'stub'));
 
-        return $this->run(new ParseFile($location, $tokens));
+        return $this->dispatch(new ParseFile($location, $tokens));
     }
 }
