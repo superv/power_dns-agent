@@ -2,12 +2,12 @@
 
 use SuperV\Agents\PowerDns\Command\InstallPowerDns;
 use SuperV\Agents\PowerDns\Command\RemovePowerDns;
-use SuperV\Platform\Domains\Droplet\Droplet;
+use SuperV\Platform\Domains\Droplet\Agent\Agent;
 
-class PowerDnsAgent extends Droplet
+class PowerDnsAgent extends Agent
 {
-    protected $commands = [
+    protected $features = [
         'install' => InstallPowerDns::class,
-        'remove' => RemovePowerDns::class,
+        'remove'  => RemovePowerDns::class,
     ];
 }
