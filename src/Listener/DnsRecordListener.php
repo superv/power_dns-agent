@@ -2,22 +2,19 @@
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use SuperV\Agents\PowerDns\Command\GetConnection;
-use SuperV\Modules\Hosting\Domains\Services\Dns\DnsRecordModel;
-use SuperV\Modules\Hosting\Domains\Services\Dns\DnsZoneModel;
 use SuperV\Modules\Hosting\Domains\Services\Dns\RecordModel;
 use SuperV\Modules\Hosting\Domains\Services\Dns\ZoneModel;
+use SuperV\Platform\Domains\Event\Listener;
 
-class DnsRecordListener
+class DnsRecordListener extends Listener
 {
-    use DispatchesJobs;
-
     public function created(RecordModel $record)
     {
         /** @var ZoneModel $zone */
         $zone = $record->zone;
 
         $connection = $this->dispatch(new GetConnection($zone->getServer()));
-        $domainId = $connection->table('domains')->select('id')->where('name', $zone->domain)->first()->id;
+        $domainId = $connection->table('domains')->select('id')->where('name', $zone->getDomain())->first()->id;
 
         $id = $connection->table('records')->insertGetId([
             'domain_id'   => $domainId,
