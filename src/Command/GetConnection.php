@@ -19,7 +19,7 @@ class GetConnection
     {
         $config->set('database.connections.powerdns', [
             'driver'    => 'mysql',
-            'host'      => $this->server->ip(),
+            'host'      => $this->server->getIpAddress(),
             'database'  => 'pdns',
             'username'  => 'pdns',
             'password'  => 'app_shh',
