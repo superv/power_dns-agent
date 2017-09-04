@@ -1,6 +1,5 @@
 <?php namespace SuperV\Agents\PowerDns\Command;
 
-use SuperV\Modules\Supreme\Domains\Server\Jobs\RunServerScriptJob;
 use SuperV\Platform\Domains\Droplet\Agent\AgentFeature;
 
 class InstallPowerDns extends AgentFeature
@@ -11,28 +10,24 @@ class InstallPowerDns extends AgentFeature
 
     public function handle()
     {
-        if (!$server = $this->server()) {
+        if (! $server = $this->server()) {
             throw new \InvalidArgumentException('Can not find server in feature params');
         }
-        // update server packages
-        $script = 'apt-get update';
-        $this->addJob((new RunServerScriptJob($server, 'Update Server Packages'))->setScript($script));
 
-        // install mysql
-        $stub = "superv.agents.power_dns::install_mysql";
-        $tokens = ['mysql_admin_pass' => $this->mysqlAdminPass];
-        $this->addJob((new RunServerScriptJob($server, 'Install Mysql Server'))->fromStub($stub, $tokens));
+        $this->job('Update Server Package')
+             ->script('apt-get update');
 
-        // restart mysql server
-        $this->addJob((new RunServerScriptJob($server, 'Restart Mysql Server'))->setScript("service mysql restart"));
+        $this->job('Install Mysql Server')
+             ->stub('superv.agents.power_dns::install_mysql', ['mysql_admin_pass' => $this->mysqlAdminPass]);
 
-        // install power dns
-        $stub = "superv.agents.power_dns::install_power_dns";
-        $tokens = [
-            'mysql_admin_pass' => $this->mysqlAdminPass,
-            'mysql_app_pass'   => 'app_shh',
-        ];
-        $this->addJob((new RunServerScriptJob($server, 'Install Power DNS'))->fromStub($stub, $tokens));
+        $this->job('Restart Mysql Server')
+             ->script('service mysql restart');
+
+        $this->job('Install Power DNS')
+             ->stub('superv.agents.power_dns::install_power_dns', [
+                 'mysql_admin_pass' => $this->mysqlAdminPass,
+                 'mysql_app_pass'   => 'app_shh',
+             ]);
 
         return $this->jobs;
     }
