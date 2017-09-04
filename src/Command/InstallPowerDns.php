@@ -10,10 +10,6 @@ class InstallPowerDns extends AgentFeature
 
     public function handle()
     {
-        if (! $server = $this->server()) {
-            throw new \InvalidArgumentException('Can not find server in feature params');
-        }
-
         $this->job('Update Server Package')
              ->script('apt-get update');
 
